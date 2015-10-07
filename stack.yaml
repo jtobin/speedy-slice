@@ -1,0 +1,7 @@
+flags: {}
+packages:
+  - '.'
+extra-deps:
+  - mwc-probability-1.0.1
+  - mcmc-types-1.0.1
+resolver: lts-3.3
