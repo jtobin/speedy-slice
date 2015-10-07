@@ -3,3 +3,7 @@
 debug
 *o
 *hi
+dist
+test/Binomial*
+test/BNN
+test/Rosenbrock

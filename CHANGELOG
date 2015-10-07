@@ -1,0 +1,3 @@
+- 0.1.1.0
+    * Generalize types - should now work over containers of arbitrary Num and
+		  Variate instances.

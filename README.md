@@ -7,6 +7,9 @@ operate over generic indexed traversable functors, so you can expect it to
 work if your target function takes a list, vector, map, sequence, etc. as its
 argument.
 
+Additionally you can sample over anything that's an instance of both `Num` and
+`Variate`, which is useful in the case of discrete parameters.
+
 Exports a `mcmc` function that prints a trace to stdout, as well as a
 `slice` transition operator that can be used more generally.
 

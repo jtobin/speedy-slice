@@ -1,7 +1,8 @@
-{-# OPTIONS_GHC -Wall #-}
+-- {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE NoMonomorphismRestriction #-}
 {-# LANGUAGE TypeFamilies #-}
 
 -- |
@@ -44,7 +45,7 @@ import Data.Maybe (fromMaybe)
 import Data.Sampling.Types
 import Pipes hiding (next)
 import qualified Pipes.Prelude as Pipes
-import System.Random.MWC.Probability (Prob, Gen)
+import System.Random.MWC.Probability (Prob, Gen, Variate)
 import qualified System.Random.MWC.Probability as MWC
 
 -- | Trace 'n' iterations of a Markov chain and stream them to stdout.
@@ -56,9 +57,9 @@ import qualified System.Random.MWC.Probability as MWC
 -- -0.48500122500661846,0.46245400501919076
 mcmc
   :: (Show (t a), FoldableWithIndex (Index (t a)) t, Ixed (t a),
-     IxValue (t a) ~ Double)
+     Num (IxValue (t a)), Variate (IxValue (t a)))
   => Int
-  -> Double
+  -> IxValue (t a)
   -> t a
   -> (t a -> Double)
   -> Gen RealWorld
@@ -75,8 +76,8 @@ mcmc n radial chainPosition target gen = runEffect $
 -- A Markov chain driven by the slice transition operator.
 chain
   :: (PrimMonad m, FoldableWithIndex (Index (t a)) t, Ixed (t a),
-     IxValue (t a) ~ Double)
-  => Double
+     Num (IxValue (t a)), Variate (IxValue (t a)))
+  => IxValue (t a)
   -> Chain (t a) b
   -> Gen (PrimState m)
   -> Producer (Chain (t a) b) m ()
@@ -89,8 +90,8 @@ chain radial = loop where
 -- | A slice sampling transition operator.
 slice
   :: (PrimMonad m, FoldableWithIndex (Index (t a)) t, Ixed (t a),
-      IxValue (t a) ~ Double)
-  => Double
+      Num (IxValue (t a)), Variate (IxValue (t a)))
+  => IxValue (t a)
   -> Transition m (Chain (t a) b)
 slice step = do
   Chain _ _ position _ <- get
@@ -110,10 +111,10 @@ slice step = do
 
 -- Find a bracket by expanding its bounds through powers of 2.
 findBracket
-  :: (Ord a, Ixed s, IxValue s ~ Double)
+  :: (Ord a, Ixed s, Num (IxValue s))
   => (s -> a)
   -> Index s
-  -> Double
+  -> IxValue s
   -> a
   -> s
   -> (IxValue s, IxValue s)
@@ -136,36 +137,36 @@ findBracket target index step height xs = go step xs xs where
         in  go (2 * e) bl0 br0
 
 expandBracketLeft
-  :: (Ixed s, IxValue s ~ Double)
+  :: (Ixed s, Num (IxValue s))
   => Index s
-  -> Double
+  -> IxValue s
   -> s
   -> s
 expandBracketLeft = expandBracketBy (-)
 
 expandBracketRight
-  :: (Ixed s, IxValue s ~ Double)
+  :: (Ixed s, Num (IxValue s))
   => Index s
-  -> Double
+  -> IxValue s
   -> s
   -> s
 expandBracketRight = expandBracketBy (+)
 
 expandBracketBy
   :: Ixed s
-  => (IxValue s -> Double -> IxValue s)
+  => (IxValue s -> t -> IxValue s)
   -> Index s
-  -> Double
+  -> t
   -> s
   -> s
 expandBracketBy f index step xs = xs & ix index %~ (`f` step )
 
 -- Perform rejection sampling within the supplied bracket.
 rejection
-  :: (Ord a, PrimMonad m, Ixed b, IxValue b ~ Double)
+  :: (Ord a, PrimMonad m, Ixed b, Variate (IxValue b))
   => (b -> a)
   -> Index b
-  -> (Double, Double)
+  -> (IxValue b, IxValue b)
   -> a
   -> b
   -> Prob m b
