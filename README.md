@@ -1,4 +1,7 @@
-# speedy-slice [![Build Status](https://secure.travis-ci.org/jtobin/speedy-slice.png)](http://travis-ci.org/jtobin/speedy-slice)
+# speedy-slice
+
+[![Build Status](https://secure.travis-ci.org/jtobin/speedy-slice.png)](http://travis-ci.org/jtobin/speedy-slice)
+[![Hackage Version](https://img.shields.io/hackage/v/speedy-slice.svg)](http://hackage.haskell.org/package/speedy-slice)
 
 Speedy slice sampling, as per [Neal, 2003](http://people.ee.duke.edu/~lcarin/slice.pdf).
 
