@@ -1,5 +1,5 @@
 name:                speedy-slice
-version:             0.1.1
+version:             0.1.2
 synopsis:            Speedy slice sampling.
 homepage:            http://github.com/jtobin/speedy-slice
 license:             MIT
@@ -44,7 +44,6 @@ library
       Numeric.MCMC.Slice
   build-depends:
       base            <  5
-    , ghc-prim
     , lens
     , primitive
     , mcmc-types      >= 1.0.1

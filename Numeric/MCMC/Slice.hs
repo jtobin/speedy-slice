@@ -38,9 +38,8 @@ module Numeric.MCMC.Slice (
   ) where
 
 import Control.Monad.Trans.State.Strict (put, get, execStateT)
-import Control.Monad.Primitive (PrimMonad, PrimState)
+import Control.Monad.Primitive (PrimMonad, PrimState, RealWorld)
 import Control.Lens hiding (index)
-import GHC.Prim (RealWorld)
 import Data.Maybe (fromMaybe)
 import Data.Sampling.Types
 import Pipes hiding (next)
