@@ -1,3 +1,6 @@
-- 0.1.1
-    * Generalize types - should now work over containers of arbitrary Num and
-		  Variate instances.
+# Changelog
+
+- 0.1.5 (2016-12-04)
+		* Add missing dependency bounds.
+
+
