@@ -1,5 +1,5 @@
 name:                speedy-slice
-version:             0.1.5
+version:             0.2.0
 synopsis:            Speedy slice sampling.
 homepage:            http://github.com/jtobin/speedy-slice
 license:             MIT

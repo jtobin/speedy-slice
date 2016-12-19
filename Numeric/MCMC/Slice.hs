@@ -1,4 +1,4 @@
--- {-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE FlexibleContexts #-}
@@ -38,7 +38,8 @@ module Numeric.MCMC.Slice (
   ) where
 
 import Control.Monad.Trans.State.Strict (put, get, execStateT)
-import Control.Monad.Primitive (PrimMonad, PrimState, RealWorld)
+import Control.Monad.Primitive (PrimMonad, PrimState)
+import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Lens hiding (index)
 import Data.Maybe (fromMaybe)
 import Data.Sampling.Types
@@ -55,18 +56,19 @@ import qualified System.Random.MWC.Probability as MWC
 -- -9.310661272172682e-2,0.2562387977415508
 -- -0.48500122500661846,0.46245400501919076
 mcmc
-  :: (Show (t a), FoldableWithIndex (Index (t a)) t, Ixed (t a),
+  :: (MonadIO m, PrimMonad m,
+     Show (t a), FoldableWithIndex (Index (t a)) t, Ixed (t a),
      Num (IxValue (t a)), Variate (IxValue (t a)))
   => Int
   -> IxValue (t a)
   -> t a
   -> (t a -> Double)
-  -> Gen RealWorld
-  -> IO ()
+  -> Gen (PrimState m)
+  -> m ()
 mcmc n radial chainPosition target gen = runEffect $
         chain radial Chain {..} gen
     >-> Pipes.take n
-    >-> Pipes.mapM_ print
+    >-> Pipes.mapM_ (liftIO . print)
   where
     chainScore    = lTarget chainTarget chainPosition
     chainTunables = Nothing
