@@ -14,8 +14,9 @@ argument.
 Additionally you can sample over anything that's an instance of both `Num` and
 `Variate`, which is useful in the case of discrete parameters.
 
-Exports a `mcmc` function that prints a trace to stdout, as well as a
-`slice` transition operator that can be used more generally.
+Exports a `mcmc` function that prints a trace to stdout, a `chain` function for
+working with results in memory, and a `slice` transition operator that can be
+used more generally.
 
     import Numeric.MCMC.Slice
     import Data.Sequence (Seq, index, fromList)

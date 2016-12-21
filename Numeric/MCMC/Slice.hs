@@ -28,6 +28,7 @@
 
 module Numeric.MCMC.Slice (
     mcmc
+  , chain
   , slice
 
   -- * Re-exported
@@ -37,6 +38,8 @@ module Numeric.MCMC.Slice (
   , MWC.asGenIO
   ) where
 
+import Control.Monad (replicateM)
+import Control.Monad.Codensity (lowerCodensity)
 import Control.Monad.Trans.State.Strict (put, get, execStateT)
 import Control.Monad.Primitive (PrimMonad, PrimState)
 import Control.Monad.IO.Class (MonadIO, liftIO)
@@ -66,7 +69,7 @@ mcmc
   -> Gen (PrimState m)
   -> m ()
 mcmc n radial chainPosition target gen = runEffect $
-        chain radial Chain {..} gen
+        drive radial Chain {..} gen
     >-> Pipes.take n
     >-> Pipes.mapM_ (liftIO . print)
   where
@@ -74,15 +77,44 @@ mcmc n radial chainPosition target gen = runEffect $
     chainTunables = Nothing
     chainTarget   = Target target Nothing
 
--- A Markov chain driven by the slice transition operator.
+-- | Trace 'n' iterations of a Markov chain and collect them in a list.
+--
+-- >>> results <- withSystemRandom . asGenIO $ mcmc 3 1 [0, 0] rosenbrock
 chain
+  :: (PrimMonad m, FoldableWithIndex (Index (f a)) f, Ixed (f a)
+     , Variate (IxValue (f a)), Num (IxValue (f a)))
+  => Int
+  -> IxValue (f a)
+  -> f a
+  -> (f a -> Double)
+  -> Gen (PrimState m)
+  -> m [Chain (f a) b]
+chain n radial position target gen = runEffect $
+        drive radial origin gen
+    >-> collect n
+  where
+    ctarget = Target target Nothing
+
+    origin = Chain {
+        chainScore    = lTarget ctarget position
+      , chainTunables = Nothing
+      , chainTarget   = ctarget
+      , chainPosition = position
+      }
+
+    collect :: Monad m => Int -> Consumer a m [a]
+    collect size = lowerCodensity $
+      replicateM size (lift Pipes.await)
+
+-- A Markov chain driven by the slice transition operator.
+drive
   :: (PrimMonad m, FoldableWithIndex (Index (t a)) t, Ixed (t a),
      Num (IxValue (t a)), Variate (IxValue (t a)))
   => IxValue (t a)
   -> Chain (t a) b
   -> Gen (PrimState m)
-  -> Producer (Chain (t a) b) m ()
-chain radial = loop where
+  -> Producer (Chain (t a) b) m c
+drive radial = loop where
   loop state prng = do
     next <- lift (MWC.sample (execStateT (slice radial) state) prng)
     yield next

@@ -1,5 +1,5 @@
 name:                speedy-slice
-version:             0.2.0
+version:             0.3.0
 synopsis:            Speedy slice sampling.
 homepage:            http://github.com/jtobin/speedy-slice
 license:             MIT
@@ -20,8 +20,9 @@ description:
   Additionally you can sample over anything that's an instance of both 'Num' and
   'Variate', which is useful in the case of discrete parameters.
   .
-  Exports a 'mcmc' function that prints a trace to stdout, as well as a
-  'slice' transition operator that can be used more generally.
+  Exports a 'mcmc' function that prints a trace to stdout, a 'chain' function
+  for collecting results in memory, and a 'slice' transition operator that can
+  be used more generally.
   .
   > import Numeric.MCMC.Slice
   > import Data.Sequence (Seq, index, fromList)
@@ -44,6 +45,7 @@ library
       Numeric.MCMC.Slice
   build-depends:
       base            >= 4 && < 6
+    , kan-extensions  >= 5 && < 6
     , lens            >= 4 && < 5
     , primitive       >= 0.6 && < 1.0
     , mcmc-types      >= 1.0.1
