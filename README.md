@@ -31,3 +31,7 @@ used more generally.
 
 ![trace](https://dl.dropboxusercontent.com/spa/u0s6617yxinm2ca/zp-9gl6z.png)
 
+*speedy-slice* is a member of the [declarative][decl] suit of libraries,
+containing a bunch of MCMC algorithms that play nicely together.
+
+[decl]: https://github.com/jtobin/declarative
