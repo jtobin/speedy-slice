@@ -42,7 +42,6 @@ import Control.Monad (replicateM)
 import Control.Monad.Codensity (lowerCodensity)
 import Control.Monad.Trans.State.Strict (put, get, execStateT)
 import Control.Monad.Primitive (PrimMonad, PrimState)
-import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Lens hiding (index)
 import Data.Maybe (fromMaybe)
 import Data.Sampling.Types
