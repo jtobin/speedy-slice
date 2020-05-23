@@ -1,5 +1,5 @@
 name:                speedy-slice
-version:             0.3.0
+version:             0.3.1
 synopsis:            Speedy slice sampling.
 homepage:            http://github.com/jtobin/speedy-slice
 license:             MIT
@@ -8,6 +8,7 @@ author:              Jared Tobin
 maintainer:          jared@jtobin.ca
 category:            Math
 build-type:          Simple
+tested-with:         GHC == 8.8.3
 cabal-version:       >=1.10
 description:
   Speedy slice sampling.
@@ -62,7 +63,6 @@ Test-suite rosenbrock
     -rtsopts
   build-depends:
       base              >= 4 && < 6
-    , mwc-probability   >= 1.0.1
     , speedy-slice
 
 Test-suite bnn
@@ -74,7 +74,6 @@ Test-suite bnn
     -rtsopts
   build-depends:
       base              >= 4 && < 6
-    , containers        >= 0.5 && < 0.6
-    , mwc-probability   >= 1.0.1
+    , containers        >= 0.5 && < 0.7
     , speedy-slice
 
