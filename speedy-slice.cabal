@@ -1,5 +1,5 @@
 name:                speedy-slice
-version:             0.3.1
+version:             0.3.2
 synopsis:            Speedy slice sampling.
 homepage:            http://github.com/jtobin/speedy-slice
 license:             MIT
@@ -47,7 +47,7 @@ library
   build-depends:
       base            >= 4 && < 6
     , kan-extensions  >= 5 && < 6
-    , lens            >= 4 && < 5
+    , lens            >= 4 && < 6
     , primitive       >= 0.6 && < 1.0
     , mcmc-types      >= 1.0.1
     , mwc-probability >= 1.0.1
