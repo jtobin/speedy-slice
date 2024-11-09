@@ -1,9 +1,5 @@
 # speedy-slice
 
-[![Build Status](https://secure.travis-ci.org/jtobin/speedy-slice.png)](http://travis-ci.org/jtobin/speedy-slice)
-[![Hackage Version](https://img.shields.io/hackage/v/speedy-slice.svg)](http://hackage.haskell.org/package/speedy-slice)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/jtobin/speedy-slice/blob/master/LICENSE)
-
 Speedy slice sampling, as per [Neal, 2003](http://people.ee.duke.edu/~lcarin/slice.pdf).
 
 This implementation of the slice sampling algorithm uses `lens` as a means to
